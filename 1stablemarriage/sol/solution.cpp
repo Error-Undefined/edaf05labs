@@ -1,38 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <map>
 #include <stdio.h>
+#include <list>
 
-bool womanPrefers(std::vector<int> *prefList, int currentMan, int newMan)
+bool womanPrefers(int *prefList, int currentMan, int newMan)
 {
-  int currentManIndex = -1;
-  int newManIndex = -1;
-  int counter = 0;
-  for (std::vector<int>::iterator it = prefList->begin(); it != prefList->end(); ++it)
-  {
-    if (*it == currentMan)
-    {
-      currentManIndex = counter;
-    }
-    else if (*it == newMan)
-    {
-      newManIndex = counter;
-    }
-
-    if (newManIndex >= 0 && currentManIndex >= 0)
-    {
-      break;
-    }
-
-    ++counter;
-  }
-  return newManIndex < currentManIndex;
+  return prefList[newMan] < prefList[currentMan];
 }
 
-void GS(std::map<int, std::vector<int> *> *manMap, std::map<int, std::vector<int> *> *womanMap, std::map<int, int> *matchings, int couples)
+void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<int, int *> *womanMap, std::unordered_map<int, int> *matchings, int couples)
 {
-  std::vector<int> manList;
-  std::map<int, int> manProposals;
+  std::list<int> manList;
+  std::unordered_map<int, int> manProposals;
   for (int i = 0; i < couples; ++i)
   {
     manList.push_back(i + 1);
@@ -42,7 +23,7 @@ void GS(std::map<int, std::vector<int> *> *manMap, std::map<int, std::vector<int
   while (manList.size() > 0)
   {
     int man = manList.front();
-    manList.erase(manList.begin());
+    manList.pop_front();
     std::vector<int> *prefList = (*manMap)[man];
     int woman = prefList->at(manProposals[man]);
     manProposals[man]++;
@@ -64,9 +45,9 @@ void GS(std::map<int, std::vector<int> *> *manMap, std::map<int, std::vector<int
   }
 }
 
-void printMap(std::map<int, std::vector<int> *> manMap, std::map<int, std::vector<int> *> womanMap)
+void printMap(std::unordered_map<int, std::vector<int> *> manMap, std::unordered_map<int, std::vector<int> *> womanMap)
 {
-  for (std::map<int, std::vector<int> *>::iterator it = manMap.begin(); it != manMap.end(); ++it)
+  for (std::unordered_map<int, std::vector<int> *>::iterator it = manMap.begin(); it != manMap.end(); ++it)
   {
     std::cout << "Man " << it->first << ":";
     std::vector<int> *prefList = it->second;
@@ -77,7 +58,7 @@ void printMap(std::map<int, std::vector<int> *> manMap, std::map<int, std::vecto
     std::cout << std::endl;
   }
 
-  for (std::map<int, std::vector<int> *>::iterator it = womanMap.begin(); it != womanMap.end(); ++it)
+  for (std::unordered_map<int, std::vector<int> *>::iterator it = womanMap.begin(); it != womanMap.end(); ++it)
   {
     std::cout << "Woman " << it->first << ":";
     std::vector<int> *prefList = it->second;
@@ -92,9 +73,9 @@ void printMap(std::map<int, std::vector<int> *> manMap, std::map<int, std::vecto
 int main()
 {
 
-  std::map<int, std::vector<int> *> manMap;
-  std::map<int, std::vector<int> *> womanMap;
-  std::map<int, int> matchings;
+  std::unordered_map<int, std::vector<int> *> manMap;
+  std::unordered_map<int, int *> womanMap;
+  std::unordered_map<int, int> matchings;
 
   // scan data
   int lines;
@@ -103,27 +84,42 @@ int main()
   for (int i = 0; i < lines * 2; ++i)
   {
     int personIndex;
-    std::vector<int> *currentList = new std::vector<int>;
     scanf("%d", &personIndex);
     if (womanMap.count(personIndex) == 0)
     {
-      womanMap[personIndex] = currentList;
+      int *prefList = new int[lines + 1];
+      womanMap[personIndex] = prefList;
+      for (int j = 0; j < lines; ++j)
+      {
+        int preference;
+        scanf("%d", &preference);
+        prefList[preference] = j + 1;
+      }
     }
     else
     {
+      std::vector<int> *currentList = new std::vector<int>;
       manMap[personIndex] = currentList;
-    }
-    for (int j = 0; j < lines; ++j)
-    {
-      int preference;
-      scanf("%d", &preference);
-      currentList->push_back(preference);
+      for (int j = 0; j < lines; ++j)
+      {
+        int preference;
+        scanf("%d", &preference);
+        currentList->push_back(preference);
+      }
     }
   }
 
+  //std::cout << "Finished reading\n";
+
   GS(&manMap, &womanMap, &matchings, lines);
 
-  for (std::map<int, int>::iterator it = matchings.begin(); it != matchings.end(); ++it)
+  std::map<int, int> sortedMatchings;
+
+  for (std::unordered_map<int, int>::iterator it = matchings.begin(); it != matchings.end(); ++it)
+  {
+    sortedMatchings[it->first] = it->second;
+  }
+  for (std::map<int, int>::iterator it = sortedMatchings.begin(); it != sortedMatchings.end(); ++it)
   {
     std::cout << it->second << std::endl;
   }
