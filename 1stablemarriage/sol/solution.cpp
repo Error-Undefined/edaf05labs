@@ -4,6 +4,8 @@
 #include <map>
 #include <stdio.h>
 #include <list>
+#include <chrono>
+#include <ctime>
 
 bool womanPrefers(int *prefList, int currentMan, int newMan)
 {
@@ -12,8 +14,10 @@ bool womanPrefers(int *prefList, int currentMan, int newMan)
 
 void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<int, int *> *womanMap, std::unordered_map<int, int> *matchings, int couples)
 {
-  std::list<int> manList;
-  std::unordered_map<int, int> manProposals;
+  std::list<int> manList;                    // List of men to propose
+  std::unordered_map<int, int> manProposals; // Map of indicies to keep track of proposals
+
+  // Fill the list of men to propose and initialize the index map
   for (int i = 0; i < couples; ++i)
   {
     manList.push_back(i + 1);
@@ -32,7 +36,7 @@ void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<
     {
       (*matchings)[woman] = man;
     }
-    else if (womanPrefers(womanMap->at(woman), (*matchings)[woman], man))
+    else if (womanPrefers((*womanMap)[woman], (*matchings)[woman], man))
     {
       int oldMan = (*matchings)[woman];
       (*matchings)[woman] = man;
@@ -42,31 +46,6 @@ void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<
     {
       manList.push_back(man);
     }
-  }
-}
-
-void printMap(std::unordered_map<int, std::vector<int> *> manMap, std::unordered_map<int, std::vector<int> *> womanMap)
-{
-  for (std::unordered_map<int, std::vector<int> *>::iterator it = manMap.begin(); it != manMap.end(); ++it)
-  {
-    std::cout << "Man " << it->first << ":";
-    std::vector<int> *prefList = it->second;
-    for (std::vector<int>::iterator vecIt = prefList->begin(); vecIt != prefList->end(); ++vecIt)
-    {
-      std::cout << *vecIt << " ";
-    }
-    std::cout << std::endl;
-  }
-
-  for (std::unordered_map<int, std::vector<int> *>::iterator it = womanMap.begin(); it != womanMap.end(); ++it)
-  {
-    std::cout << "Woman " << it->first << ":";
-    std::vector<int> *prefList = it->second;
-    for (std::vector<int>::iterator vecIt = prefList->begin(); vecIt != prefList->end(); ++vecIt)
-    {
-      std::cout << *vecIt << " ";
-    }
-    std::cout << std::endl;
   }
 }
 
@@ -109,9 +88,15 @@ int main()
     }
   }
 
-  //std::cout << "Finished reading\n";
+  //auto start = std::chrono::system_clock::now();
 
   GS(&manMap, &womanMap, &matchings, lines);
+
+  //auto end = std::chrono::system_clock::now();
+
+  //std::chrono::duration<double> time = end - start;
+
+  //std::cout << "Computation took " << time.count() << "s" << std::endl;
 
   std::map<int, int> sortedMatchings;
 
