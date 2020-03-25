@@ -114,7 +114,7 @@ int main()
       std::getline(std::cin, line);
       if (!line.empty())
       {
-        //std::cout << line << std::endl;
+        //std::cout << line << "\n";
         inputWords.push_back(line);
         graph[line] = new std::list<std::string>;
       }
@@ -159,7 +159,7 @@ int main()
     {
       std::cout << *it2 << ",";
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   } */
 
   for (std::map<std::string *, std::string *>::iterator it = pathToTest.begin(); it != pathToTest.end(); ++it)
@@ -173,6 +173,6 @@ int main()
     {
       std::cout << "Impossible";
     }
-    std::cout << std::endl;
+    std::cout << "\n";
   }
 }
