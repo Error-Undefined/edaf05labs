@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <unordered_map>
 #include <map>
 #include <stdio.h>
@@ -12,10 +11,11 @@ bool womanPrefers(int *prefList, int currentMan, int newMan)
   return prefList[newMan] < prefList[currentMan];
 }
 
-void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<int, int *> *womanMap, std::unordered_map<int, int> *matchings, int couples)
+void GS(std::unordered_map<int, int *> *manMap, std::unordered_map<int, int *> *womanMap, std::unordered_map<int, int> *matchings)
 {
   std::list<int> manList;                    // List of men to propose
   std::unordered_map<int, int> manProposals; // Map of indicies to keep track of proposals
+  int couples = manMap->size();
 
   // Fill the list of men to propose and initialize the index map
   for (int i = 0; i < couples; ++i)
@@ -26,11 +26,11 @@ void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<
 
   while (manList.size() > 0)
   {
-    int man = manList.front();
+    int man = manList.front(); //The man to propose
     manList.pop_front();
-    std::vector<int> *prefList = (*manMap)[man];
-    int woman = prefList->at(manProposals[man]);
-    manProposals[man]++;
+    int *prefList = (*manMap)[man];
+    int woman = prefList[manProposals[man]];
+    manProposals[man]++; //increment the current man's index in the preference list
 
     if (matchings->count(woman) == 0)
     {
@@ -49,10 +49,11 @@ void GS(std::unordered_map<int, std::vector<int> *> *manMap, std::unordered_map<
   }
 }
 
-int main()
+int main() // Main only handles IO.
 {
+  auto start = std::chrono::system_clock::now();
 
-  std::unordered_map<int, std::vector<int> *> manMap;
+  std::unordered_map<int, int *> manMap;
   std::unordered_map<int, int *> womanMap;
   std::unordered_map<int, int> matchings;
 
@@ -77,26 +78,24 @@ int main()
     }
     else
     {
-      std::vector<int> *currentList = new std::vector<int>;
+      int *currentList = new int[lines];
       manMap[personIndex] = currentList;
       for (int j = 0; j < lines; ++j)
       {
         int preference;
         scanf("%d", &preference);
-        currentList->push_back(preference);
+        currentList[j] = preference;
       }
     }
   }
 
-  //auto start = std::chrono::system_clock::now();
+  auto startRun = std::chrono::system_clock::now();
 
-  GS(&manMap, &womanMap, &matchings, lines);
+  GS(&manMap, &womanMap, &matchings);
 
-  //auto end = std::chrono::system_clock::now();
+  auto endRun = std::chrono::system_clock::now();
 
-  //std::chrono::duration<double> time = end - start;
-
-  //std::cout << "Computation took " << time.count() << "s" << std::endl;
+  std::chrono::duration<double> timeRun = endRun - startRun;
 
   std::map<int, int> sortedMatchings;
 
@@ -108,4 +107,11 @@ int main()
   {
     std::cout << it->second << std::endl;
   }
+  auto end = std::chrono::system_clock::now();
+
+  std::chrono::duration<double> time = end - start;
+
+  std::cout << "Computation took " << timeRun.count() << "s" << std::endl;
+
+  std::cout << "Program run took in total " << time.count() << "s" << std::endl;
 }
