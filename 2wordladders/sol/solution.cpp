@@ -1,7 +1,5 @@
 #include <string>
-#include <stdio.h>
 #include <list>
-#include <vector>
 #include <map>
 #include <iostream>
 
@@ -100,7 +98,7 @@ int main()
   std::cin >> words;
   std::cin >> queries;
 
-  std::map<std::string, int> lookupTable;
+  std::map<std::string, int> lookupTable; //we store the words as unique integers instead of strings.
 
   std::list<int> *graph[words]; //the graph
 
