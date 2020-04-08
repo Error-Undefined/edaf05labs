@@ -28,6 +28,6 @@ The preference lists do not change and are thus implemented as simple integer ar
 
 These two maps of type $<int, int * >$ are supplied to the GS-function, as well as a $std::unordered\_map<int, int>$ in which we store the matchings. In the function we also create a list of type $std::list<int>$ to keep track of the next man to propose, as well as a $std::map<int, int>$ to store the index at which the men are in their personal preference list. Finally, the algorithm is implemented like the pseudocode in the lecture notes.
 
-The time complexity overall is $O(n^2)$; the use of $unordered_map$ and $list$ means that the data structure operations all have constant time complexity and all comparaisons also have constant complexity; thus these don't impact the overall time complexity. Each man has n women in their preference list to propose to and we have in total n men; each loop iteration one man proposes and thus we have at most $n^2$ proposals, leading to a $O(n^2)$ time complexity.
+The time complexity overall is $O(n^2)$; the use of $unordered\_map$ and $list$ means that the data structure operations all have constant time complexity and all comparaisons also have constant complexity; thus these don't impact the overall time complexity. Each man has n women in their preference list to propose to and we have in total n men; each loop iteration one man proposes and thus we have at most $n^2$ proposals, leading to a $O(n^2)$ time complexity.
 
 \end{document}

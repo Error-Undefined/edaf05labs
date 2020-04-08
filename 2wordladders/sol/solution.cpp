@@ -1,15 +1,14 @@
-#include <iostream>
-#include <cstdio>
 #include <string>
-#include <map>
+#include <stdio.h>
 #include <list>
 #include <vector>
-#include <algorithm>
+#include <map>
+#include <iostream>
 
 bool sameLastLetters(std::string *s1, std::string *s2)
 {
-  if (s1 == s2 || s1->compare(*s2) == 0)
-  { //Same reference
+  if (s1->compare(*s2) == 0)
+  { //Same string and we do not want a node to have a node to have an edge to itself
     return false;
   }
 
@@ -46,133 +45,120 @@ bool sameLastLetters(std::string *s1, std::string *s2)
   return true;
 }
 
-//Breadth-first-search on the graph graph, with start start and end end. Returns path length, or -1 if no path was found.
-int BFS(std::map<std::string, std::list<std::string> *> *graph, std::string *start, std::string *end)
+int BFS(std::list<int> **graph, int start, int end, int nodeCount)
 {
-  if (start->compare(*end) == 0)
+  if (start == end)
   {
     return 0;
   }
 
-  std::map<std::string, int> visitedMap;
-  std::map<std::string, std::string> prevMap;
+  std::list<int> layerList; //List of nodes we have to explore
+  layerList.push_back(start);
 
-  std::list<std::string> layerList;
-  layerList.push_back(*start);
-  for (std::map<std::string, std::list<std::string> *>::iterator it = graph->begin(); it != graph->end(); ++it)
+  int visitedTracker[nodeCount]; //Array to keep track of visited nodes; not visited = 0, visited = 1
+  for (int i = 0; i < nodeCount; i++)
   {
-    visitedMap[it->first] = 0;
+    visitedTracker[i] = 0;
   }
+  visitedTracker[start] = 1;
 
-  visitedMap[*start] = 1;
+  int predTracker[nodeCount]; // Store the predecessors of each node
 
   while (layerList.size() > 0)
   {
-    std::string currentNode = layerList.front();
+    int previousNode = layerList.front();
     layerList.pop_front();
-    std::list<std::string> *adjacentList = graph->at(currentNode);
-    for (std::list<std::string>::iterator it = adjacentList->begin(); it != adjacentList->end(); ++it)
+
+    for (std::list<int>::iterator it = graph[previousNode]->begin(); it != graph[previousNode]->end(); it++)
     {
-      if (visitedMap[*it] == 0)
+      int currentNode = *it;
+      if (visitedTracker[currentNode] == 0)
       {
-        visitedMap[*it] = 1;
-        layerList.push_back(*it);
-        prevMap[*it] = currentNode;
-        if (end->compare(*it) == 0)
+        visitedTracker[currentNode] = 1;
+        layerList.push_back(currentNode);
+        predTracker[currentNode] = previousNode;
+        if (currentNode == end)
         {
-          int retVal = 0;
-          std::string endNodeIteration = *it;
-          while (start->compare(endNodeIteration) != 0)
+          int pathLength = 0;
+          while (currentNode != start)
           {
-            endNodeIteration = prevMap[endNodeIteration];
-            ++retVal;
+            pathLength++;
+            currentNode = predTracker[currentNode];
           }
-          return retVal;
+          return pathLength;
         }
       }
     }
   }
-
   return -1;
 }
 
 int main()
 {
-
   int words;
   int queries;
-  scanf("%d", &words);
-  scanf("%d", &queries);
+  std::cin >> words;
+  std::cin >> queries;
 
-  std::map<std::string, std::list<std::string> *> graph;
+  std::map<std::string, int> lookupTable;
+
+  std::list<int> *graph[words]; //the graph
 
   {
-    std::vector<std::string> inputWords;
-    int i = 0;
+    std::map<int, std::string> reverseLookupTable;
+    int i = -1;
     for (std::string line; i < words; i++)
     {
       std::getline(std::cin, line);
+      //std::cout << "i is " << i << std::endl;
       if (!line.empty())
       {
-        //std::cout << line << "\n";
-        inputWords.push_back(line);
-        graph[line] = new std::list<std::string>;
-      }
-      else
-      {
-        --i;
+        lookupTable[line] = i;
+        reverseLookupTable[i] = line;
+        graph[i] = new std::list<int>;
       }
     }
-
     for (i = 0; i < words; i++)
     {
       for (int j = 0; j < words; j++)
       {
-        if (sameLastLetters(&inputWords[i], &inputWords[j]))
+        std::string word1 = reverseLookupTable[i];
+        std::string word2 = reverseLookupTable[j];
+        if (sameLastLetters(&word1, &word2))
         {
-          graph[inputWords[i]]->push_back(inputWords[j]);
+          graph[i]->push_back(j);
         }
       }
     }
   }
 
-  std::map<std::string *, std::string *> pathToTest;
-  for (int i = 0; i < queries; ++i)
+  int pathTotest[queries][2];
+
+  for (int i = 0; i < queries; i++)
   {
-    char part1[6];
-    char part2[6];
-    scanf("%s", part1);
-    scanf("%s", part2);
+    std::string inputString;
+    std::cin >> inputString;
+    int inIntegerForm = lookupTable[inputString];
+    pathTotest[i][0] = inIntegerForm;
 
-    std::string *string1 = new std::string(part1);
-    std::string *string2 = new std::string(part2);
-
-    //std::cout << *string1 << " " << *string2 << "\n";
-    pathToTest[string1] = string2;
+    std::cin >> inputString;
+    inIntegerForm = lookupTable[inputString];
+    pathTotest[i][1] = inIntegerForm;
   }
-
-  /* for (std::map<std::string, std::list<std::string> *>::iterator it = graph.begin(); it != graph.end(); ++it)
+  for (int i = 0; i < queries; i++)
   {
-    std::cout << it->first << " has neighbours ";
-    std::list<std::string> *list = it->second;
-    for (std::list<std::string>::iterator it2 = list->begin(); it2 != list->end(); ++it2)
-    {
-      std::cout << *it2 << ",";
-    }
-    std::cout << "\n";
-  } */
+    int src = pathTotest[i][0];
+    int dest = pathTotest[i][1];
+    int res = BFS(graph, src, dest, words);
 
-  for (std::map<std::string *, std::string *>::iterator it = pathToTest.begin(); it != pathToTest.end(); ++it)
-  {
-    int res = BFS(&graph, it->first, it->second);
-    if (res >= 0)
-    {
-      std::cout << res;
-    }
-    else
+    if (res == -1)
     {
       std::cout << "Impossible";
     }
-    std::cout << "\n";
+    else
+    {
+      std::cout << res;
+    }
+    std::cout << std::endl;
   }
 }

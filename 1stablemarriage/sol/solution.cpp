@@ -111,7 +111,7 @@ int main() // Main only handles IO.
 
   std::chrono::duration<double> time = end - start;
 
-  std::cout << "Computation took " << timeRun.count() << "s" << std::endl;
+  //std::cout << "Computation took " << timeRun.count() << "s" << std::endl;
 
-  std::cout << "Program run took in total " << time.count() << "s" << std::endl;
+  //std::cout << "Program run took in total " << time.count() << "s" << std::endl;
 }
