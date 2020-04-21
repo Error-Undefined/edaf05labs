@@ -2,6 +2,8 @@
 #include <list>
 #include <unordered_map>
 #include <iostream>
+#include <chrono>
+#include <ctime>
 
 bool sameLastLetters(std::string *s1, std::string *s2)
 {
@@ -67,6 +69,7 @@ int BFS(std::list<int> **graph, int start, int end, int nodeCount)
     int previousNode = layerList.front();
     layerList.pop_front();
 
+    //Iterate over the node's adjacency list
     for (std::list<int>::iterator it = graph[previousNode]->begin(); it != graph[previousNode]->end(); it++)
     {
       int currentNode = *it;
@@ -93,6 +96,8 @@ int BFS(std::list<int> **graph, int start, int end, int nodeCount)
 
 int main()
 {
+  auto prgmStart = std::chrono::system_clock::now();
+
   int words;
   int queries;
   std::cin >> words;
@@ -108,6 +113,7 @@ int main()
     for (std::string line; i < words; i++)
     {
       std::getline(std::cin, line);
+      //std::cout << "i is " << i << std::endl;
       if (!line.empty())
       {
         lookupTable[line] = i;
@@ -131,6 +137,9 @@ int main()
 
   int pathTotest[queries][2];
 
+  auto init = std::chrono::system_clock::now();
+  std::chrono::duration<double> bfsTime = init - init;
+
   for (int i = 0; i < queries; i++)
   {
     std::string inputString;
@@ -147,7 +156,12 @@ int main()
   {
     int src = pathTotest[i][0];
     int dest = pathTotest[i][1];
+
+    auto start = std::chrono::system_clock::now();
     int res = BFS(graph, src, dest, words);
+    auto end = std::chrono::system_clock::now();
+
+    bfsTime += (end - start);
 
     if (res == -1)
     {
@@ -159,4 +173,8 @@ int main()
     }
     std::cout << std::endl;
   }
+  auto prgmEnd = std::chrono::system_clock::now();
+  std::chrono::duration<double> totalTime = prgmEnd - prgmStart;
+
+  std::cout << "Total program time was: " << totalTime.count() << "s and BFS time was: " << bfsTime.count() << "s\n";
 }
