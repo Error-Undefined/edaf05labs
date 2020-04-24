@@ -1,15 +1,19 @@
 #include <iostream>
-#include <queue>
 #include <vector>
-#include <list>
 #include <algorithm>
 
+// Represents a pair of nodes.
 typedef std::pair<int, int> intPair;
 
+// Represents a weighted edge: first the weight, then the two nodes.
 typedef std::pair<int, std::pair<int, int> *> edge;
 
+// Comparator function for two edges.
 bool edgeComp(edge *e1, edge *e2) { return e2->first < e1->first; };
 
+/**
+ * Find in union-find. Returns the set identifier (canoïcal member) of the set in which v is.
+ */
 int find(int v, int *parents)
 {
   int p = v;
@@ -29,6 +33,9 @@ int find(int v, int *parents)
   return p;
 }
 
+/**
+ * Union in union-find. Unites the sets of nodes u and v.
+ */
 void unionSet(int u, int v, int *parents, int *sizes)
 {
   u = find(u, parents);
@@ -46,6 +53,9 @@ void unionSet(int u, int v, int *parents, int *sizes)
   }
 }
 
+/**
+ * Kruskals algorithm for finding a minimum spanning tree. Returns a vector with all the edges in the mst.
+ */
 std::vector<edge *> *kruskal(std::vector<edge *> *edges, int vertexCount)
 {
   std::vector<edge *> *mst = new std::vector<edge *>; //vector to store edges of the mst
@@ -54,9 +64,12 @@ std::vector<edge *> *kruskal(std::vector<edge *> *edges, int vertexCount)
 
   for (int i = 1; i <= vertexCount; i++)
   {
-    parents[i] = -1; //Initialize all parents to -1 (null)
+    parents[i] = -1; //Initialize all parents to -1 (null; no parent)
     sizes[i] = 1;    //Initialize all set sizes to 1
   }
+
+  //Sort the edge vector
+  std::sort(edges->begin(), edges->end(), edgeComp);
 
   while (!edges->empty())
   {
@@ -104,8 +117,6 @@ int main()
     edgeVector.push_back(e);
   }
 
-  std::sort(edgeVector.begin(), edgeVector.end(), edgeComp);
-
   mst = kruskal(&edgeVector, people);
   int mstLength = 0;
 
@@ -115,11 +126,4 @@ int main()
   }
 
   std::cout << mstLength << std::endl;
-
-  /* while (edgeVector.size() > 0)
-  {
-    edge *e = edgeVector.top();
-    edgeVector.pop();
-    std::cout << "Edge: " << e->second->first << " - " << e->second->second << ", weight " << e->first << std::endl;
-  } */
 }
