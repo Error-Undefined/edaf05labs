@@ -51,12 +51,12 @@ kruskal(std::priority_queue<edge *, std::vector<edge *>, decltype(edgeComp)> *ed
 {
   std::vector<edge *> *mst = new std::vector<edge *>; //vector to store edges of th emst
   int parents[vertexCount + 1];                       //Keep track of parents for union-find
-  int sizes[vertexCount + 1];
+  int sizes[vertexCount + 1];                         //Size of the set that the current vertex is part of
 
   for (int i = 1; i <= vertexCount; i++)
   {
-    parents[i] = -1;
-    sizes[i] = 1;
+    parents[i] = -1; //Initialize all parents to -1 (null)
+    sizes[i] = 1;    //Initialize all set sizes to 1
   }
 
   while (edges->size() > 0)
@@ -115,10 +115,10 @@ int main()
 
   std::cout << mstLength << std::endl;
 
-  while (false)
+  /* while (edgeVector.size() > 0)
   {
     edge *e = edgeVector.top();
     edgeVector.pop();
     std::cout << "Edge: " << e->second->first << " - " << e->second->second << ", weight " << e->first << std::endl;
-  }
+  } */
 }
