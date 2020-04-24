@@ -8,10 +8,7 @@ typedef std::pair<int, int> intPair;
 
 typedef std::pair<int, std::pair<int, int> *> edge;
 
-struct comp
-{
-  bool operator()(edge *e1, edge *e2) { return e2->first < e1->first; };
-} comparator;
+bool edgeComp(edge *e1, edge *e2) { return e2->first < e1->first; };
 
 int find(int v, int *parents)
 {
@@ -107,7 +104,7 @@ int main()
     edgeVector.push_back(e);
   }
 
-  std::sort(edgeVector.begin(), edgeVector.end(), comparator);
+  std::sort(edgeVector.begin(), edgeVector.end(), edgeComp);
 
   mst = kruskal(&edgeVector, people);
   int mstLength = 0;
