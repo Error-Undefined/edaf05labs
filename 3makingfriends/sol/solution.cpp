@@ -8,7 +8,10 @@ typedef std::pair<int, int> intPair;
 
 typedef std::pair<int, std::pair<int, int> *> edge;
 
-auto edgeComp = [](edge *e1, edge *e2) { return e1->first > e2->first; };
+struct comp
+{
+  bool operator()(edge *e1, edge *e2) { return e2->first < e1->first; };
+} comparator;
 
 int find(int v, int *parents)
 {
@@ -46,10 +49,9 @@ void unionSet(int u, int v, int *parents, int *sizes)
   }
 }
 
-std::vector<edge *> *
-kruskal(std::priority_queue<edge *, std::vector<edge *>, decltype(edgeComp)> *edges, int vertexCount)
+std::vector<edge *> *kruskal(std::vector<edge *> *edges, int vertexCount)
 {
-  std::vector<edge *> *mst = new std::vector<edge *>; //vector to store edges of th emst
+  std::vector<edge *> *mst = new std::vector<edge *>; //vector to store edges of the mst
   int parents[vertexCount + 1];                       //Keep track of parents for union-find
   int sizes[vertexCount + 1];                         //Size of the set that the current vertex is part of
 
@@ -59,10 +61,9 @@ kruskal(std::priority_queue<edge *, std::vector<edge *>, decltype(edgeComp)> *ed
     sizes[i] = 1;    //Initialize all set sizes to 1
   }
 
-  while (edges->size() > 0)
+  while (!edges->empty())
   {
-    edge *shortest = edges->top();
-    edges->pop();
+    edge *shortest = edges->back();
 
     int u = shortest->second->first;
     int v = shortest->second->second;
@@ -75,6 +76,7 @@ kruskal(std::priority_queue<edge *, std::vector<edge *>, decltype(edgeComp)> *ed
       mst->push_back(shortest);
       unionSet(uF, vF, parents, sizes);
     }
+    edges->pop_back();
   }
 
   return mst;
@@ -88,7 +90,7 @@ int main()
   std::cin >> people;
   std::cin >> pairs;
 
-  std::priority_queue<edge *, std::vector<edge *>, decltype(edgeComp)> edgeVector(edgeComp);
+  std::vector<edge *> edgeVector;
   std::vector<edge *> *mst;
 
   for (int M = 0; M < pairs; M++)
@@ -102,8 +104,10 @@ int main()
     intPair *nodePair = new intPair(person1, person2);
 
     edge *e = new edge(weight, nodePair);
-    edgeVector.push(e);
+    edgeVector.push_back(e);
   }
+
+  std::sort(edgeVector.begin(), edgeVector.end(), comparator);
 
   mst = kruskal(&edgeVector, people);
   int mstLength = 0;
