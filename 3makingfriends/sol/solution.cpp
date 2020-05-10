@@ -12,7 +12,7 @@ typedef std::pair<int, std::pair<int, int> *> edge;
 bool edgeComp(edge *e1, edge *e2) { return e2->first < e1->first; };
 
 /**
- * Find in union-find. Returns the set identifier (canoïcal member) of the set in which v is.
+ * Find in union-find. Returns the set identifier (canonical member) of the set in which v is.
  */
 int find(int v, int *parents)
 {
@@ -38,9 +38,6 @@ int find(int v, int *parents)
  */
 void unionSet(int u, int v, int *parents, int *sizes)
 {
-  u = find(u, parents);
-  v = find(v, parents);
-
   if (sizes[u] < sizes[v])
   {
     parents[u] = v;
@@ -68,9 +65,10 @@ std::vector<edge *> *kruskal(std::vector<edge *> *edges, int vertexCount)
     sizes[i] = 1;    //Initialize all set sizes to 1
   }
 
-  //Sort the edge vector
+  //Sort the edge vector: O(m log m); m <= n^2 ger O (m log n)
   std::sort(edges->begin(), edges->end(), edgeComp);
 
+  //m loops; total O(m*alpha(n,m)) where alpha <= 4
   while (!edges->empty())
   {
     edge *shortest = edges->back();
