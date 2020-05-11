@@ -73,7 +73,7 @@ public class Solution {
 
     double minInSet = Double.MAX_VALUE;
     for (int i = 0; i < lineSet.size(); i++) {
-      for (int j = i + 1; j < lineSet.size() && j < i + 15; j++) {
+      for (int j = i + 1; j < lineSet.size() && j < i + 6; j++) {
         double tempDistance = distance(lineSet.get(i), lineSet.get(j));
         minInSet = Math.min(tempDistance, minInSet);
       }
