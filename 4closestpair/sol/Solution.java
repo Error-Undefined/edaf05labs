@@ -25,18 +25,27 @@ public class Solution {
     return minDistance;
   }
 
-  double closestRecursive(Point[] xArray, Point[] yArray, int xStart, int xEnd) {
-    int points = xEnd - xStart;
+  double closestRecursive(Point[] xArray, Point[] yArray) {
+    int points = xArray.length;
 
     if (points < 4) {
       return bruteForce(xArray, points);
     }
 
-    int midIndex = xStart + (points + 1) / 2;
+    int midIndex = (points + 1) / 2;
     Point midPoint = xArray[midIndex];
 
-    Point[] yLeft = new Point[midIndex - xStart];
-    Point[] yRight = new Point[xEnd - midIndex];
+    Point[] xLeft = new Point[midIndex];
+    Point[] xRight = new Point[points - midIndex];
+    Point[] yLeft = new Point[midIndex];
+    Point[] yRight = new Point[points - midIndex];
+
+    for (int i = 0; i < midIndex; i++) {
+      xLeft[i] = xArray[i];
+    }
+    for (int i = 0; i < points - midIndex; i++) {
+      xRight[i] = xArray[i + midIndex];
+    }
 
     int leftIndex = 0;
     int rightIndex = 0;
@@ -50,17 +59,13 @@ public class Solution {
       }
     }
 
-    System.out.println(leftIndex + ", " + yLeft.length);
-    System.out.println(rightIndex + ", " + yRight.length);
-    System.out.println(points);
-
-    double dL = closestRecursive(xArray, yLeft, xStart, midIndex);
-    double dR = closestRecursive(xArray, yRight, midIndex, xEnd);
+    double dL = closestRecursive(xLeft, yLeft);
+    double dR = closestRecursive(xRight, yRight);
 
     double delta = Math.min(dL, dR);
 
     List<Point> lineSet = new ArrayList<>();
-    for (Point p : xArray) {
+    for (Point p : yArray) {
       if (Math.abs(p.x - midPoint.x) < delta) {
         lineSet.add(p);
       }
@@ -97,9 +102,9 @@ public class Solution {
     Arrays.sort(xArray, (p1, p2) -> p1.x - p2.x);
     Arrays.sort(yArray, (p1, p2) -> p1.y - p2.y);
 
-    double result = closestRecursive(xArray, yArray, 0, points);
+    double result = closestRecursive(xArray, yArray);
 
-    System.out.println(result);
+    System.out.printf("%.6f\n", result);
   }
 
   public static void main(String[] args) {
