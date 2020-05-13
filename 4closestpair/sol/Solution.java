@@ -25,27 +25,21 @@ public class Solution {
     return minDistance;
   }
 
-  double closestRecursive(Point[] xArray, Point[] yArray) {
-    int points = xArray.length;
+  double closestRecursive(Point[] xArray, Point[] yArray, int xStart, int xEnd) {
+    int points = yArray.length;
 
     if (points < 4) {
-      return bruteForce(xArray, points);
+      return bruteForce(yArray, points);
     }
 
-    int midIndex = (points + 1) / 2;
+    int midIndex = xStart + (points + 1) / 2;
     Point midPoint = xArray[midIndex];
 
-    Point[] xLeft = new Point[midIndex];
-    Point[] xRight = new Point[points - midIndex];
-    Point[] yLeft = new Point[midIndex];
-    Point[] yRight = new Point[points - midIndex];
+    int yLeftLength = (points + 1) / 2;
+    int yRightLength = points - yLeftLength;
 
-    for (int i = 0; i < midIndex; i++) {
-      xLeft[i] = xArray[i];
-    }
-    for (int i = 0; i < points - midIndex; i++) {
-      xRight[i] = xArray[i + midIndex];
-    }
+    Point[] yLeft = new Point[yLeftLength];
+    Point[] yRight = new Point[yRightLength];
 
     int leftIndex = 0;
     int rightIndex = 0;
@@ -59,8 +53,8 @@ public class Solution {
       }
     }
 
-    double dL = closestRecursive(xLeft, yLeft);
-    double dR = closestRecursive(xRight, yRight);
+    double dL = closestRecursive(xArray, yLeft, xStart, midIndex);
+    double dR = closestRecursive(xArray, yRight, midIndex, xEnd);
 
     double delta = Math.min(dL, dR);
 
@@ -89,6 +83,7 @@ public class Solution {
     Point[] xArray = new Point[points];
     Point[] yArray = new Point[points];
 
+    long t1 = System.currentTimeMillis();
     for (int i = 0; i < points; i++) {
       int x = inputScanner.nextInt();
       int y = inputScanner.nextInt();
@@ -98,13 +93,23 @@ public class Solution {
       yArray[i] = p;
     }
     inputScanner.close();
+    long t2 = System.currentTimeMillis();
+
+    long tio = t2 - t1;
+
+    // System.out.println("Time for io: " + tio + "ms");
 
     Arrays.sort(xArray, (p1, p2) -> p1.x - p2.x);
     Arrays.sort(yArray, (p1, p2) -> p1.y - p2.y);
 
-    double result = closestRecursive(xArray, yArray);
+    double result = closestRecursive(xArray, yArray, 0, points);
 
     System.out.printf("%.6f\n", result);
+
+    long t3 = System.currentTimeMillis();
+    long tp = t3 - t1;
+
+    // System.out.println("Total time: " + tp + "ms");
   }
 
   public static void main(String[] args) {

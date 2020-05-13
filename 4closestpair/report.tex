@@ -7,17 +7,23 @@
 \pagestyle{empty}
 
 \title{Closest Pair Report}
-\author{Author 1 and Author 2}
+\author{Otto Holmström}
 
 \begin{document}
   \maketitle
 
   \section{Results}
 
-  \todo[inline]{Briefly comment the results, did the script say all your solutions were correct? Approximately how long time does it take for the program to run on the largest input? What takes the majority of the time?}
+The script shows all files to have the right output. It takes the program on average to run the largest file 10 seconds, with 2 seconds being devoted to reading the input and 8 seconds being used by the actual recursion.
+
+  %\todo[inline]{Briefly comment the results, did the script say all your solutions were correct? Approximately how long time does it take for the program to run on the largest input? What takes the majority of the time?}
 
   \section{Implementation details}
 
-  \todo[inline]{How did you implement the solution? Which data structures were used? Which modifications to these data structures were used? What is the overall running time? Why?}
+  %\todo[inline]{How did you implement the solution? Which data structures were used? Which modifications to these data structures were used? What is the overall running time? Why?}
+
+The solution was implemented using the divide and conquer principle. We use two arrays as data structures, where one stores the points by increasing x-coordinate and one by increasing y-coordinate. These are sorted before the recursion starts. We also pass in a range for the x-array so we don't have to recreate it every time.
+
+The overall running time is $O(n log n)$; the sorting of the arrays before the recursion starts costs $O(n log n)$. In the recursion, the divide step costs $O(n)$ as dividing the y-array is a $O(n)$ operation; we find the shortest distance in both halves and then we find the shortest distance in the strip, which is at most a $O(n)$ operation. Because no operation is more than $O(n)$, we can use the master theorem to find that the overall time complexity of the recursion, and thus also the program, is $O (n log n)$.
 
 \end{document}
