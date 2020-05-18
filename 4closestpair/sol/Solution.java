@@ -6,25 +6,44 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Solution {
+  /**
+   * Finds the distance between two points. Returns 0 if the same point is passed
+   * in twice.
+   * 
+   * @param p1 a point
+   * @param p2 another point
+   * @return the distance between these points.
+   */
   double distance(Point p1, Point p2) {
     return Math.hypot(p2.x - p1.x, p2.y - p1.y);
   }
 
-  double bruteForce(Point[] xArray, int points) {
+  /**
+   * Brute forces a solution of the closest points.
+   * 
+   * @param xArray an array of points
+   * @param points the number of points to check
+   * @return the distance between the two closest points as a double
+   */
+  double bruteForce(Point[] pointArray, int points) {
     if (points == 2) {
-      return distance(xArray[0], xArray[1]);
+      return distance(pointArray[0], pointArray[1]);
     }
 
     double minDistance = Double.MAX_VALUE;
     for (int i = 0; i < points; i++) {
       for (int j = i + 1; j < points; j++) {
-        double tempDistance = distance(xArray[i], xArray[j]);
+        double tempDistance = distance(pointArray[i], pointArray[j]);
         minDistance = Math.min(tempDistance, minDistance);
       }
     }
     return minDistance;
   }
 
+  // If we see the recursion as a tree, any layer of the tree has O(n) time
+  // complexity
+  //
+  // there are log n layers, which gives a total time complexity of O(n*log n)
   double closestRecursive(Point[] xArray, Point[] yArray, int xStart, int xEnd) {
     int points = yArray.length;
 
@@ -67,7 +86,7 @@ public class Solution {
 
     double minInSet = Double.MAX_VALUE;
     for (int i = 0; i < lineSet.size(); i++) {
-      for (int j = i + 1; j < lineSet.size() && j < i + 6; j++) {
+      for (int j = i + 1; j < lineSet.size() && j < i + 15; j++) {
         double tempDistance = distance(lineSet.get(i), lineSet.get(j));
         minInSet = Math.min(tempDistance, minInSet);
       }
