@@ -72,6 +72,7 @@ public class Solution {
         sb1.append(c1);
         sb2.append('*');
         i--;
+        // Case misaligned, insert * into first string
       } else if (optMatrix[i][j - 1] + delta == optMatrix[i][j]) {
         sb1.append('*');
         sb2.append(c2);
@@ -106,6 +107,8 @@ public class Solution {
   }
 
   void run() {
+    // long t0 = System.currentTimeMillis();
+
     Scanner scan = new Scanner(System.in);
     String alphabet;
 
@@ -140,6 +143,7 @@ public class Solution {
 
     int Q = scan.nextInt();
     scan.nextLine();
+    // long algoTime = 0;
 
     for (int i = 0; i < Q; i++) {
       String input = scan.nextLine();
@@ -148,10 +152,19 @@ public class Solution {
       String s1 = splitInTwo[0];
       String s2 = splitInTwo[1];
 
+      // long t1 = System.currentTimeMillis();
       System.out.println(align(s1, s2));
+      // long t2 = System.currentTimeMillis();
+      // algoTime += (t2 - t1);
     }
 
     scan.close();
+
+    // long tEnd = System.currentTimeMillis();
+    // tEnd -= t0;
+
+    // System.out.println("Total time: " + tEnd + "ms");
+    // System.out.println("Algo time: " + algoTime + "ms");
   }
 
   public static void main(String[] args) {
