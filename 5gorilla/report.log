@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2017.11.29)  19 MAY 2020 21:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2017.11.29)  20 MAY 2020 10:36
 entering extended mode
 **./report.tex
 (report.tex
@@ -793,8 +793,7 @@ LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Cskip=\skip49
 )
 \c@@todonotes@numberoftodonotes=\count130
-)
-No file report.aux.
+) (report.aux)
 \openout1 = `report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
@@ -819,6 +818,7 @@ Package microtype Info: Using default expansion set `basictext'.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
+
 ("C:\Program Files\MiKTeX 2.9\tex\latex\microtype\mt-cmr.cfg"
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
@@ -893,18 +893,18 @@ ABD: EveryShipout initializing macros [1
 {C:/Users/Otto/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (report.aux)
  ) 
 Here is how much of TeX's memory you used:
- 14778 strings out of 493312
- 288301 string characters out of 3138901
- 359060 words of memory out of 3000000
- 18016 multiletter control sequences out of 15000+200000
+ 14781 strings out of 493312
+ 288374 string characters out of 3138901
+ 359054 words of memory out of 3000000
+ 18017 multiletter control sequences out of 15000+200000
  8560 words of font info for 41 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 62i,6n,81p,589b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 62i,7n,81p,589b,199s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
 ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fil
 es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on report.pdf (1 page, 57667 bytes).
+Output written on report.pdf (1 page, 57697 bytes).
 PDF statistics:
  49 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
