@@ -1,12 +1,29 @@
 #include <iostream>
 #include <list>
+#include <vector>
 
 struct edge
 {
   int u;
   int v;
   int c;
+  bool deleted;
 };
+
+int maximumFlow(int start, int end, int edges, int nodes, std::vector<edge *> **graph)
+{
+  //Initialize flow
+  int edgeFlow[edges];
+  for (int i = 0; i < edges; i++)
+  {
+    edgeFlow[i] = 0;
+  };
+  std::vector<edge *> *residualGraph[nodes];
+  for (int i = 0; i < nodes; i++)
+  {
+    residualGraph[i] = new std::vector<edge *>;
+  }
+}
 
 int main()
 {
@@ -20,10 +37,10 @@ int main()
   edge *edges[M];
 
   //Initialize the graph with adjacency lists
-  std::list<edge *> *graph[N];
+  std::vector<edge *> *graph[N];
   for (int i = 0; i < N; i++)
   {
-    graph[i] = new std::list<edge *>;
+    graph[i] = new std::vector<edge *>;
   }
 
   for (int i = 0; i < M; i++)
@@ -32,6 +49,7 @@ int main()
     std::cin >> e->u;
     std::cin >> e->v;
     std::cin >> e->c;
+    e->deleted = false;
     edges[i] = e;
     graph[e->u]->push_back(e);
     graph[e->v]->push_back(e);
@@ -45,11 +63,14 @@ int main()
 
   for (int i = 0; i < N; i++)
   {
-    std::list<edge *> *adjList = graph[i];
+    std::vector<edge *> *adjList = graph[i];
     std::cout << "Node " << i << " has edges:\n";
-    for (std::list<edge *>::iterator it = adjList->begin(); it != adjList->end(); it++)
+    for (std::vector<edge *>::iterator it = adjList->begin(); it != adjList->end(); it++)
     {
-      std::cout << (*it)->u << "-" << (*it)->v << " with cost: " << (*it)->c << "\n";
+      if (!(*it)->deleted)
+      {
+        std::cout << (*it)->u << "-" << (*it)->v << " with cost: " << (*it)->c << "\n";
+      }
     }
   }
 }
